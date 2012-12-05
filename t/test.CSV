@@ -1,0 +1,37 @@
+"Subject","Start Date","Start Time","End Date","End Time","All day event","Reminder on/off","Reminder Date","Reminder Time","Meeting Organizer","Required Attendees","Optional Attendees","Meeting Resources","Billing Information","Categories","Description","Location","Mileage","Priority","Private","Sensitivity","Show time as"
+"teamname: Meeting","10.9.2012","11:30:00","10.9.2012","12:00:00","False","True","10.9.2012","11:15:00","XXXXXXXX","XXXXXXXX","XXXXXXXX",,,,"XXXXXXXX
+
+","XXXXXXXX",,"Normal","False","Normal","2"
+"teamname: Daily Scrum","11.9.2012","11:30:00","11.9.2012","12:00:00","False","False","11.9.2012","11:15:00","XXXXXXXX","XXXXXXXX","XXXXXXXX",,,,"XXXXXXXX
+
+","XXXXXXXX",,"Normal","False","Normal","2"
+"KT: Perl","12.9.2012","11:30:00","12.9.2012","12:00:00","False","True","12.9.2012","11:15:00","XXXXXXXX","XXXXXXXX","XXXXXXXX",,,,"XXXXXXXX
+
+
+","Office",,"Normal","False","Normal","2"
+"Knowledge transfer PHP","13.9.2012","11:30:00","13.9.2012","12:00:00","False","True","13.9.2012","11:15:00","XXXXXXXX","XXXXXXXX","XXXXXXXX",,,,"XXXXXXXX
+
+
+","Office",,"Normal","False","Normal","2"
+"Teamname: Little Meeting","14.9.2012","11:30:00","14.9.2012","12:00:00","False","True","14.9.2012","11:15:00","XXXXXXXX","XXXXXXXX","XXXXXXXX",,,,"XXXXXXXX
+
+
+
+
+
+","XXXXXXXX",,"Normal","False","Normal","2"
+
+
+
+
+
+"
+1234567890حما ا@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ
+^{}\[~]|€
+ÆæßÉ !“#¤%&'()*+,-./
+0123456789:;<=>?¡
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+ÄÖÑÜ§¿
+1234567890تدو ال
+ل
+"""
