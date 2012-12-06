@@ -1,5 +1,4 @@
-wrc-oss
-=======
+==wrc-oss==
 
 WRC - Berichtsheftgenerator für Azubis (Weekly Report Creator)
 
