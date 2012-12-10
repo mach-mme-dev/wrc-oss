@@ -34,7 +34,6 @@ sub counter {
   my $current_year  = $datum[5] + 1900;
   my $current_month = $datum[4] + 1;
   my $current_day   = $datum[3];
-
   my $dt           = DateTime->now();
   my $current_week = $dt->week_number();
 
@@ -57,6 +56,7 @@ sub get_dates {
   $dt->set_time_zone('Europe/Berlin');
   my $currentWeek = $dt->week_number();
   my %dates;
+
   if ( $weekOfYear != 0 ) {
 
     if ( $weekOfYear > $currentWeek ) {
@@ -69,28 +69,27 @@ sub get_dates {
   while ( $dt->day_of_week() < 7 ) {
     $dt->add( days => 1 );
   }
-  if ($format eq "mdy") {
+  if ( $format eq "mdy" ) {
     ### cvs & git
     $dates{'end'} = $dt->mdy($seperator) . ' 23:59:59 ' . $dt->time_zone_short_name();
     $dt->subtract( weeks => $weeks );
     $dt->add( days => 1 );
     $dates{'start'} = $dt->mdy($seperator) . ' 00:00:00 ' . $dt->time_zone_short_name();
   }
-  elsif ($format eq "ymd") {
+  elsif ( $format eq "ymd" ) {
     ### svn
     $dates{'end'} = $dt->ymd($seperator) . 'T23:59:59';
     $dt->subtract( weeks => $weeks );
     $dt->add( days => 1 );
     $dates{'start'} = $dt->ymd($seperator) . 'T00:00:00';
   }
-  elsif ($format eq "dmy") {
+  elsif ( $format eq "dmy" ) {
     ### writer dates
     $dates{'end'} = $dt->dmy($seperator);
     $dt->subtract( weeks => $weeks );
     $dt->add( days => 1 );
     $dates{'start'} = $dt->dmy($seperator);
   }
-
   return ( \%dates );
 }
 
@@ -184,13 +183,13 @@ sub calendar_entries {
   return $box;
 }
 
- sub filtering_commits {
+sub filtering_commits {
 
-    my ( $user, $commitnotes) = @_;
-    my %output;
-    my %commitnotes = %{$commitnotes};
+  my ( $user, $commitnotes ) = @_;
+  my %output;
+  my %commitnotes = %{$commitnotes};
 
-    for my $date ( keys %{$commitnotes} ) {
+  for my $date ( keys %{$commitnotes} ) {
     for my $comment ( keys %{ $commitnotes{$date} } ) {
       my $author = $commitnotes{$date}->{$comment};
       if ( $author eq $user ) {
@@ -206,7 +205,6 @@ sub calendar_entries {
   }
   return ( \%output );
 }
-
 
 1;
 __END__
