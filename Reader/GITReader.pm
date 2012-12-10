@@ -15,13 +15,14 @@ sub get_git_log {
   my $startDate;
   my $endDate;
 
-  my $dates = get_dates_cvs( \$weekOfYear, \$timespan );
+  my $dates = get_dates( \$weekOfYear, \$timespan, "mdy", "/" );
   $startDate = ${$dates}{'start'};
   $endDate   = ${$dates}{'end'};
   my $clone_cmd;
-  $clone_cmd = "cd ./temporary_checkout_folder; git clone -q ssh://$user@" . "$host$repo";
+  my $checkout_folder = get_checkout_folder();
+  $clone_cmd = "cd ./$checkout_folder; git clone -q ssh://$user@" . "$host$repo";
   my $log_cmd =
-"cd ./temporary_checkout_folder/$project; git log --since='$startDate' --until='$endDate' --pretty=medium --date=iso |";
+"cd ./$checkout_folder/$project; git log --since='$startDate' --until='$endDate' --pretty=medium --date=iso |";
   my $date;
   my $comment;
   my %temp;

@@ -64,7 +64,8 @@ if (    !$user
   exit;
 }
 ### Read the commit notes for every project ###
-my $create_temporary_checkout_folder = "mkdir ./temporary_checkout_folder";
+my $checkout_folder = get_checkout_folder();
+my $create_temporary_checkout_folder = "mkdir ./$checkout_folder";
 system($create_temporary_checkout_folder);
 
 my $log_cmd;
