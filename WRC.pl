@@ -6,6 +6,7 @@ use Getopt::Std;
 use Config::General;
 use Reader::CVSReader;
 use Reader::GITReader;
+use Reader::SVNReader;
 use Reader::CalendarReader;
 use Writer::OpenDocWriter;
 use Writer::MSWordWriter;
@@ -22,7 +23,6 @@ if ($opt_c) {
   $conf   = new Config::General($opt_c);
   %config = $conf->getall();
 }
-
 my $dt           = DateTime->now();
 my $current_week = $dt->week_number();
 ### Parameters ###
@@ -64,6 +64,10 @@ if (    !$user
   exit;
 }
 ### Read the commit notes for every project ###
+my $checkout_folder = get_checkout_folder();
+my $create_temporary_checkout_folder = "mkdir ./$checkout_folder";
+system($create_temporary_checkout_folder);
+
 my $log_cmd;
 my $all_commitnote_href;
 foreach my $key ( keys %{ $config{'projects'} } ) {
@@ -85,20 +89,22 @@ foreach my $key ( keys %{ $config{'projects'} } ) {
     $log_cmd = get_git_log( $user, $input_week, $timespan, $project, $host, $repo );
     $project_commitnotes_href = read_git_log( $log_cmd, $project, $user );
   }
+  elsif ( $vcs_type eq 'svn' ) {
+    $log_cmd = get_svn_log( $input_week, $user, $timespan, $project, $host, $repo );
+    $project_commitnotes_href = read_svn_log( $log_cmd, $project, $user );
+  }
   else {
     print "VCS not supported: " . $vcs_type . ". Skipping project " . $project . "!\n";
   }
-
   $all_commitnote_href = merge_hashes( $all_commitnote_href, $project_commitnotes_href );
 }
-
 print "No commits available\n" unless $all_commitnote_href;
-
+my $cleanup_cmd = "rm -rf ./temporary_checkout_folder";
+system($cleanup_cmd);
 ### Get meetings ###
 my @regularmeetings = get_regular_meetings( $calendar_file, $team );
 my @knowledgetransfers = get_knowledgetransfers( $calendar_file, $team );
 ### Create the document ###
-
 if ( $outputformat eq 'odt' ) {
   create_odt_document(
                        $all_commitnote_href, $input_week,       $timespan,

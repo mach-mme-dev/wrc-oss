@@ -10,12 +10,13 @@ use Data::Dumper;
 sub get_cvs_log {
   ### Input from function call ###
   my ( $input_week, $user, $timespan, $project, $host, $repo ) = @_;
-  my $dates      = get_dates_cvs( \$input_week, \$timespan );
+  my $dates      = get_dates( \$input_week, \$timespan, "mdy", "/");
   my $start_date = ${$dates}{'start'};
   my $end_date   = ${$dates}{'end'};
+  my $checkout_folder = get_checkout_folder();
   $ENV{CVSROOT} = ":ext:$user@" . $host . "$repo";
-  my $checkout_cmd = "cd /tmp; cvs -Q checkout $project";
-  my $log_cmd      = "cd /tmp/$project; cvs -q log -d '$start_date<$end_date' ";
+  my $checkout_cmd = "cd ./$checkout_folder; cvs -Q checkout $project";
+  my $log_cmd      = "cd ./$checkout_folder/$project; cvs -q log -d '$start_date<$end_date' ";
 
   system($checkout_cmd );
 
@@ -27,7 +28,6 @@ sub read_cvs_log {
   ### Read commit notes vom cvs log ###
 
   my ( $log_cmd, $project, $user ) = @_;
-  my $cleanup_cmd = "rm -rf /tmp/$project";
 
   open( LOG_CMD, "$log_cmd |" ) or die "Can't run '$log_cmd'\n$!";
   my $current_line;
@@ -60,9 +60,8 @@ sub read_cvs_log {
       $committext = $current_line if !$committext;
     }
   }
-  system($cleanup_cmd);
 
-  my $output = filtering_commits( $user, \%commitnotes );
+  my $output = filtering_commits( $user, \%commitnotes);
 
   return ($output);
 }
