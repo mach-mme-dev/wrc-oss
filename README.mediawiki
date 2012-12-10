@@ -148,8 +148,7 @@ For regular meetings there has to be the '''team name''' at the beginning of the
 
  Subject: teamname1 monthly review 
           or
- Subject: teamname2 project planning meeting
-          
+ Subject: teamname2 project planning meeting     
 
 If the meeting has the purpose of sharing knowledge with colleagues, the keyword '''knowledge''' or '''KT''' has to be part of the subject.<br>Examples:
 
