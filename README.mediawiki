@@ -80,7 +80,6 @@ OpenOffice::OODoc<br>
 POSIX<br>
 MsOffice::Word::HTML::Writer<br>
 Text::CSV<br>
-Text::CSV<br>
 Test::More (testing only)<br>
 
 ===attached perl modules used===
@@ -106,8 +105,7 @@ The Headline should start with a * and contain:
 
 ====Description====
 
-Use normal text for description, with indentation of 2 spaces: 
-   
+Use normal text for description, with indentation of 2 spaces:  
    this_is_a_commit_text_line
 
 ====Comments====
