@@ -120,9 +120,9 @@ Distinguish between 3 kind of comments:<br>
 *comment
 
 The comment type has to be separated from the text with a colon or equal sign
- <nowiki>[[review: name_of_reviewer]]
-[[pair-programming= name_of_co-programmer]]
-[[comment: some_general_comment]]</nowiki>
+ <nowiki>[[review: name_of_reviewer]]</nowiki>
+ <nowiki>[[pair-programming= name_of_co-programmer]]</nowiki>
+ <nowiki>[[comment: some_general_comment]]</nowiki>
 
 To list more reviewers pair-programmers, separate them with a comma:
  <nowiki>[[pair-programming= co-programmer1,co-programmer2,co-programmer3]]</nowiki>
