@@ -74,6 +74,35 @@ sub get_dates {
 
 }
 
+sub get_dates_svn {
+  my ( $weekOfYear, $weeks ) = @_;
+  $weekOfYear = ${$weekOfYear};
+  $weeks      = ${$weeks};
+  my $dt = DateTime->now();
+  $dt->set_time_zone('Europe/Berlin');
+  my $currentWeek = $dt->week_number();
+  my %dates;
+  if ( $weekOfYear != 0 ) {
+
+    if ( $weekOfYear > $currentWeek ) {
+      $dt->add( weeks => ( $weekOfYear - $currentWeek ) );
+    }
+    else {
+      $dt->subtract( weeks => ( $currentWeek - $weekOfYear ) );
+    }
+  }
+
+  while ( $dt->day_of_week() < 7 ) {
+    $dt->add( days => 1 );
+  }
+  $dates{'end'} = $dt->ymd('-');
+  $dt->subtract( weeks => $weeks );
+  $dt->add( days => 1 );
+  $dates{'start'} = $dt->ymd('-');
+  return ( \%dates );
+
+}
+
 sub get_dates_cvs {
   my ( $weekOfYear, $weeks ) = @_;
   $weekOfYear = ${$weekOfYear};
@@ -210,7 +239,6 @@ sub calendar_entries {
       elsif ( $comment =~ m/\[\[.*?REVIEw.*?$user/is ) {
         push( @{ $output{$date} }, $comment .= "(Code review)" );
       }
-
     }
   }
   return ( \%output );

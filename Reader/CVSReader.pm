@@ -14,8 +14,8 @@ sub get_cvs_log {
   my $start_date = ${$dates}{'start'};
   my $end_date   = ${$dates}{'end'};
   $ENV{CVSROOT} = ":ext:$user@" . $host . "$repo";
-  my $checkout_cmd = "cd /tmp; cvs -Q checkout $project";
-  my $log_cmd      = "cd /tmp/$project; cvs -q log -d '$start_date<$end_date' ";
+  my $checkout_cmd = "cd ./temporary_checkout_folder; cvs -Q checkout $project";
+  my $log_cmd      = "cd ./temporary_checkout_folder/$project; cvs -q log -d '$start_date<$end_date' ";
 
   system($checkout_cmd );
 
@@ -27,7 +27,6 @@ sub read_cvs_log {
   ### Read commit notes vom cvs log ###
 
   my ( $log_cmd, $project, $user ) = @_;
-  my $cleanup_cmd = "rm -rf /tmp/$project";
 
   open( LOG_CMD, "$log_cmd |" ) or die "Can't run '$log_cmd'\n$!";
   my $current_line;
@@ -60,7 +59,6 @@ sub read_cvs_log {
       $committext = $current_line if !$committext;
     }
   }
-  system($cleanup_cmd);
 
   my $output = filtering_commits( $user, \%commitnotes);
 

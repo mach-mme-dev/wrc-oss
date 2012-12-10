@@ -80,7 +80,6 @@ OpenOffice::OODoc<br>
 POSIX<br>
 MsOffice::Word::HTML::Writer<br>
 Text::CSV<br>
-Text::CSV<br>
 Test::More (testing only)<br>
 
 ===attached perl modules used===
@@ -105,9 +104,8 @@ The Headline should start with a * and contain:
  *Example_header_text
 
 ====Description====
- 
-Use normal text for description, with indentation of 2 spaces: 
-   
+
+Use normal text for description, with indentation of 2 spaces:  
    this_is_a_commit_text_line
 
 ====Comments====
@@ -122,9 +120,9 @@ Distinguish between 3 kind of comments:<br>
 *comment
 
 The comment type has to be separated from the text with a colon or equal sign
- <nowiki>[[review: name_of_reviewer]]
-[[pair-programming= name_of_co-programmer]]
-[[comment: some_general_comment]]</nowiki>
+ <nowiki>[[review: name_of_reviewer]]</nowiki>
+ <nowiki>[[pair-programming= name_of_co-programmer]]</nowiki>
+ <nowiki>[[comment: some_general_comment]]</nowiki>
 
 To list more reviewers pair-programmers, separate them with a comma:
  <nowiki>[[pair-programming= co-programmer1,co-programmer2,co-programmer3]]</nowiki>
@@ -137,9 +135,9 @@ To list more reviewers pair-programmers, separate them with a comma:
 
 ====Example====
 
- *Script for weekly reports<br>
-   wrc/gitreader.pm (add) - created module to read git comments<br>
-   wrc/test.conf (edit) - deleted parameter3<br>
+ *Script for weekly reports
+   wrc/gitreader.pm (add) - created module to read git comments
+   wrc/test.conf (edit) - deleted parameter3
 
 ===Meeting subject conventions===
 
@@ -150,8 +148,7 @@ For regular meetings there has to be the '''team name''' at the beginning of the
 
  Subject: teamname1 monthly review 
           or
- Subject: teamname2 project planning meeting
-          
+ Subject: teamname2 project planning meeting     
 
 If the meeting has the purpose of sharing knowledge with colleagues, the keyword '''knowledge''' or '''KT''' has to be part of the subject.<br>Examples:
 

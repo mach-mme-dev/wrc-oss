@@ -19,9 +19,9 @@ sub get_git_log {
   $startDate = ${$dates}{'start'};
   $endDate   = ${$dates}{'end'};
   my $clone_cmd;
-  $clone_cmd = "cd /tmp; git clone -q ssh://$user@" . "$host$repo";
+  $clone_cmd = "cd ./temporary_checkout_folder; git clone -q ssh://$user@" . "$host$repo";
   my $log_cmd =
-"cd /tmp/$project; git log --since='$startDate' --until='$endDate' --pretty=medium --date=iso |";
+"cd ./temporary_checkout_folder/$project; git log --since='$startDate' --until='$endDate' --pretty=medium --date=iso |";
   my $date;
   my $comment;
   my %temp;
@@ -34,7 +34,6 @@ sub get_git_log {
 sub read_git_log {
 
   my ( $log_cmd, $project, $user ) = @_;
-  my $cleanup_cmd = "rm -rf /tmp/$project";
   open( LOG, $log_cmd );
   ### Read commit notes vom git log ###
   my $line;
@@ -72,7 +71,7 @@ sub read_git_log {
   }
 
   $commitnotes{$commit_date}->{$committext} = $commit_author;
-  system($cleanup_cmd);
+
   my $output = filtering_commits( $user, \%commitnotes);
   return ($output);
 }
