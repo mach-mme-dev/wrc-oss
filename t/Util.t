@@ -2,7 +2,7 @@ package WRC;
 
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 8;
 use File::Basename;
 use lib File::Basename::dirname($0) . "/..";
 use DateTime;
@@ -73,39 +73,25 @@ subtest "counter" => sub {
 ##### check sub get_dates #####
 
 subtest "get_dates" => sub {
-
   my $weekOfYear = 1;
   my $weeks      = 1;
-
   my $expected_dates =
 '((?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])';
+  my $get_dates_cvs_check = get_dates( \$weekOfYear, \$weeks, "mdy", "/" );
 
-  my $get_dates_check = get_dates( \$weekOfYear, \$weeks );
-
-  if (     ( $get_dates_check->{'start'} =~ m/$expected_dates/is )
-       and ( $get_dates_check->{'end'} =~ m/$expected_dates/is ) )
+  if (     ( $get_dates_cvs_check->{'start'} =~ m/$expected_dates/is )
+       and ( $get_dates_cvs_check->{'end'} =~ m/$expected_dates/is ) )
   {
     $date_form = 1;
   }
   else {
     $date_form = 0;
   }
+  ok( $date_form == 1, "correct date form created (mm/dd/yyyy - cvs and git)" );
 
-  ok( $date_form == 1, "correct date form created (ddmmyyyy)" );
-
-};
-
-##### check sub get_dates_cvs #####
-
-subtest "get_dates_cvs" => sub {
-
-  my $weekOfYear = 1;
-  my $weeks      = 1;
-
-  my $expected_dates =
-'((?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))[-:\\/.](?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])';
-
-  my $get_dates_cvs_check = get_dates_cvs( \$weekOfYear, \$weeks );
+  $expected_dates =
+'((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])';
+  $get_dates_cvs_check = get_dates( \$weekOfYear, \$weeks, "ymd", "-" );
 
   if (     ( $get_dates_cvs_check->{'start'} =~ m/$expected_dates/is )
        and ( $get_dates_cvs_check->{'end'} =~ m/$expected_dates/is ) )
@@ -116,8 +102,22 @@ subtest "get_dates_cvs" => sub {
     $date_form = 0;
   }
 
-  ok( $date_form == 1, "correct date form created (mmddyyyy - cvs)" );
+  ok( $date_form == 1, "correct date form created (yyyy-mm-dd - svn)" );
 
+  $expected_dates =
+'((?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))[-:\\/.](?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])';
+  $get_dates_cvs_check = get_dates( \$weekOfYear, \$weeks, "mdy", "/" );
+
+  if (     ( $get_dates_cvs_check->{'start'} =~ m/$expected_dates/is )
+       and ( $get_dates_cvs_check->{'end'} =~ m/$expected_dates/is ) )
+  {
+    $date_form = 1;
+  }
+  else {
+    $date_form = 0;
+  }
+
+  ok( $date_form == 1, "correct date form created (dd.mm.yyyy - writer)" );
 };
 
 ##### check sub merge_hashes #####
@@ -210,21 +210,21 @@ subtest "get_lines_doc" => sub {
 subtest "filtering_commits" => sub {
   my $user = "test";
   my $commitnotes = {
-    'Date:' => {
-      '    *WRC - deleted useless files' => 'test',
-      '    *WRC - renamed files'         => 'other user',
-      '    *WRC - general improvement<br>    [[pair-programming: test]]<br>    [[review: test]]' =>
-        'other user',
-      '    *BLI361<br>     created test for CVSreader.pm<br>     created test for GITreader.pm' =>
-        'other user',
-      '    *WRC - merged from other user'                                                => 'test',
-    }
+     'Date:' => {
+       '    *WRC - deleted useless files' => 'test',
+       '    *WRC - renamed files'         => 'other user',
+       '    *WRC - general improvement<br>    [[pair-programming: test]]<br>    [[review: test]]' =>
+         'other user',
+       '    *BLI361<br>     created test for CVSreader.pm<br>     created test for GITreader.pm' =>
+         'other user',
+       '    *WRC - merged from other user' => 'test',
+     }
   };
   my $expected_commitnotes = {
     'Date:' => [
       '    *WRC - merged from other user',
-'    *WRC - deleted useless files',
-      '    *WRC - general improvement<br>    [[pair-programming: test]]<br>    [[review: test]](Pair programming)'
+      '    *WRC - deleted useless files',
+'    *WRC - general improvement<br>    [[pair-programming: test]]<br>    [[review: test]](Pair programming)'
     ]
   };
 

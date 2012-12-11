@@ -24,13 +24,16 @@ sub get_traineeship_year {
   return $year;
 }
 
+sub get_checkout_folder {
+  return "temporary_checkout_folder";
+}
+
 sub counter {
   my ( $start_year, $start_month, $start_day, $input_week ) = @_;
   my @datum         = localtime();
   my $current_year  = $datum[5] + 1900;
   my $current_month = $datum[4] + 1;
   my $current_day   = $datum[3];
-
   my $dt           = DateTime->now();
   my $current_week = $dt->week_number();
 
@@ -46,42 +49,14 @@ sub counter {
 }
 
 sub get_dates {
-  my ( $weekOfYear, $weeks ) = @_;
+  my ( $weekOfYear, $weeks, $format, $seperator ) = @_;
   $weekOfYear = ${$weekOfYear};
   $weeks      = ${$weeks};
   my $dt = DateTime->now();
   $dt->set_time_zone('Europe/Berlin');
   my $currentWeek = $dt->week_number();
   my %dates;
-  if ( $weekOfYear != 0 ) {
 
-    if ( $weekOfYear > $currentWeek ) {
-      $dt->add( weeks => ( $weekOfYear - $currentWeek ) );
-    }
-    else {
-      $dt->subtract( weeks => ( $currentWeek - $weekOfYear ) );
-    }
-  }
-
-  while ( $dt->day_of_week() < 7 ) {
-    $dt->add( days => 1 );
-  }
-  $dates{'end'} = $dt->dmy('.');
-  $dt->subtract( weeks => $weeks );
-  $dt->add( days => 1 );
-  $dates{'start'} = $dt->dmy('.');
-  return ( \%dates );
-
-}
-
-sub get_dates_cvs {
-  my ( $weekOfYear, $weeks ) = @_;
-  $weekOfYear = ${$weekOfYear};
-  $weeks      = ${$weeks};
-  my $dt = DateTime->now();
-  $dt->set_time_zone('Europe/Berlin');
-  my $currentWeek = $dt->week_number();
-  my %dates;
   if ( $weekOfYear != 0 ) {
 
     if ( $weekOfYear > $currentWeek ) {
@@ -94,11 +69,27 @@ sub get_dates_cvs {
   while ( $dt->day_of_week() < 7 ) {
     $dt->add( days => 1 );
   }
-  $dates{'end'} = $dt->mdy('/') . ' 23:59:59 ' . $dt->time_zone_short_name();
-  $dt->subtract( weeks => $weeks );
-  $dt->add( days => 1 );
-  $dates{'start'} = $dt->mdy('/') . ' 00:00:00 ' . $dt->time_zone_short_name();
-
+  if ( $format eq "mdy" ) {
+    ### cvs & git
+    $dates{'end'} = $dt->mdy($seperator) . ' 23:59:59 ' . $dt->time_zone_short_name();
+    $dt->subtract( weeks => $weeks );
+    $dt->add( days => 1 );
+    $dates{'start'} = $dt->mdy($seperator) . ' 00:00:00 ' . $dt->time_zone_short_name();
+  }
+  elsif ( $format eq "ymd" ) {
+    ### svn
+    $dates{'end'} = $dt->ymd($seperator) . 'T23:59:59';
+    $dt->subtract( weeks => $weeks );
+    $dt->add( days => 1 );
+    $dates{'start'} = $dt->ymd($seperator) . 'T00:00:00';
+  }
+  elsif ( $format eq "dmy" ) {
+    ### writer dates
+    $dates{'end'} = $dt->dmy($seperator);
+    $dt->subtract( weeks => $weeks );
+    $dt->add( days => 1 );
+    $dates{'start'} = $dt->dmy($seperator);
+  }
   return ( \%dates );
 }
 
@@ -192,13 +183,13 @@ sub calendar_entries {
   return $box;
 }
 
- sub filtering_commits {
+sub filtering_commits {
 
-    my ( $user, $commitnotes) = @_;
-    my %output;
-    my %commitnotes = %{$commitnotes};
+  my ( $user, $commitnotes ) = @_;
+  my %output;
+  my %commitnotes = %{$commitnotes};
 
-    for my $date ( keys %{$commitnotes} ) {
+  for my $date ( keys %{$commitnotes} ) {
     for my $comment ( keys %{ $commitnotes{$date} } ) {
       my $author = $commitnotes{$date}->{$comment};
       if ( $author eq $user ) {
@@ -210,12 +201,10 @@ sub calendar_entries {
       elsif ( $comment =~ m/\[\[.*?REVIEw.*?$user/is ) {
         push( @{ $output{$date} }, $comment .= "(Code review)" );
       }
-
     }
   }
   return ( \%output );
 }
-
 
 1;
 __END__

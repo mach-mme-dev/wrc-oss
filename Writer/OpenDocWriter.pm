@@ -17,7 +17,7 @@ sub create_odt_document {
   ) = @_;
   ### The document handler ###
 
-  my $dates = get_dates( \$weekOfYear, \$weeks );
+  my $dates = get_dates( \$weekOfYear, \$weeks, "dmy", "." );
   my $filename = $name . " " . $report_number . " " . substr( ${$dates}{'start'}, 6 ) . ".odt";
   my $document = odfDocument(
                               file          => $filename,

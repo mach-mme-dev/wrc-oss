@@ -17,7 +17,7 @@ sub create_doc_document {
   if ( !$year ) {
     $year = 1;
   }
-  my $dates = get_dates( \$weekOfYear, \$timespan );
+  my $dates = get_dates( \$weekOfYear, \$timespan, "dmy", "." );
   my $filename = $name . " " . $report_number . " " . substr( ${$dates}{'start'}, 6 ) . ".doc";
   my %params;
   $params{'title'} = 'MsWord Test';

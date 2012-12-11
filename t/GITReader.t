@@ -37,7 +37,7 @@ my $host            = $current_project->{'host'};
 # log Zeitraum
 my $weekOfYear = 0;
 my $timespan   = 1;
-my $dates = get_dates_cvs( \$weekOfYear, \$timespan );
+my $dates = get_dates( \$weekOfYear, \$timespan, "mdy", "/"  );
 my $startDate = ${$dates}{'start'};
 my $endDate   = ${$dates}{'end'};
 
