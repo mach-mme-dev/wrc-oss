@@ -14,10 +14,29 @@ use Utility::Util;
 use DateTime;
 use Date::Calc;
 use Data::Dumper;
-our ( $opt_w, $opt_t, $opt_r, $opt_c, $opt_o, $opt_f );
+our ( $opt_w, $opt_t, $opt_r, $opt_c, $opt_o, $opt_f, $opt_h );
 getopt("wtrcaof");
 my $conf;
 my %config;
+
+#### help option -h
+
+if ($opt_h) {
+  print "\nWRC.pl [options]
+\n\n-c = expects your config file  (required)
+\n-w = number of calendar week (default = current week)
+\n-t = timespan (default = 1)
+\n-r = number of weeks since start date \n     (default = calculated out of the config parameter startDate)
+\n-o = outputpath (default = parameter outputpath in the config
+     if it's not configured , it would be the path /tmp)
+\n-f = outputformat (default = parameter outputformat in the config
+     if it's not configured , it would be .odt)
+\n\nMore information:
+https://github.com/mach-mme-dev/wrc-oss\n";
+
+exit;
+}
+
 ### Read the config file ###
 if ($opt_c) {
   $conf   = new Config::General($opt_c);
