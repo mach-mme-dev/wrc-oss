@@ -43,7 +43,9 @@ if ($opt_c) {
   %config = $conf->getall();
 }
 else {
-  die "You need a config! Your command should look like 'perl WRC.pl -c your.conf'";
+print "\nYou need a config! Your command should look like 'perl WRC.pl -c your.conf'\n
+For more information use -h \n";
+exit;
 }
 my $dt           = DateTime->now();
 my $current_week = $dt->week_number();
