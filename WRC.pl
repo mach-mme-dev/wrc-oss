@@ -24,7 +24,7 @@ my %config;
 if ($opt_h) {
   print "\nWRC.pl [options]
 \n\n-c = expects your config file  (required)
-\n-w = number of calendar week (default = current week)
+\n-w = number of calendar week (default = current calendar week)
 \n-t = timespan (default = 1)
 \n-r = number of weeks since start date \n     (default = calculated out of the config parameter startDate)
 \n-o = outputpath (default = parameter outputpath in the config
@@ -55,14 +55,15 @@ my $user       = $config{"user"};
 my $name       = $config{"name"};
 my $team       = $config{"team"};
 my $timespan   = $opt_t || 1;
-my $project;
-my $report_number = $opt_r;
-my $vcs_type;
-my $host;
-my $repo;
+my $choosen_report_number = $opt_r;
 my $outputformat = $opt_f || $config{"outputformat"} || "odt";
 my $outputpath   = $opt_o || $config{"outputpath"}   || "/tmp/";
 my $calendar_file = $config{"calendarfile"};
+my $current_report_number;
+my $vcs_type;
+my $host;
+my $repo;
+my $project;
 ### Determine year of traineeship and get report number ###
 my $year;
 my $year2;
@@ -73,15 +74,28 @@ $start_month = int($start_month);
 my $start_year = substr( $config{'startDate'}, 6 );
 $year2 = $start_year + 1;
 
-if ( !$report_number && $name ) {
-  $report_number = counter( $start_year, $start_month, $start_day, $input_week );
+$current_report_number = counter( $start_year, $start_month, $start_day, $input_week );
+
+### Check parameters ###
+
+if ( $opt_r && $opt_w ){
+    print "\nYou can only use -r OR -w !\n\nFor more information use -h \n";
+    exit;
 }
-$year = get_traineeship_year( $start_year, $year2, $start_day, $report_number );
+
+### change $input_week if -r is given ###
+
+if ( $choosen_report_number) {
+	$input_week -= ($current_report_number - $choosen_report_number);
+	$current_report_number = $choosen_report_number;
+}
+
+$year = get_traineeship_year( $start_year, $year2, $start_day, $current_report_number );
 ### Check required parameters ###
 if (    !$user
      or !$name
      or ( !$project && !$config{'projects'} )
-     or !$report_number )
+     or !$current_report_number )
 {
   print
 "Missing required information. User, full name and project must be provided either by command line or config file\n";
@@ -132,14 +146,14 @@ my @knowledgetransfers = get_knowledgetransfers( $calendar_file, $team );
 if ( $outputformat eq 'odt' ) {
   create_odt_document(
                        $all_commitnote_href, $input_week,       $timespan,
-                       $name,                $report_number,    $year,
+                       $name,                $current_report_number,    $year,
                        $outputpath,          \@regularmeetings, \@knowledgetransfers
   );
 }
 elsif ( $outputformat eq 'doc' ) {
   create_doc_document(
                        $all_commitnote_href, $input_week,       $timespan,
-                       $name,                $report_number,    $year,
+                       $name,                $current_report_number,    $year,
                        $outputpath,          \@regularmeetings, \@knowledgetransfers
   );
 }
