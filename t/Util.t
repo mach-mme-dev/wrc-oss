@@ -76,7 +76,8 @@ subtest "get_dates" => sub {
   my $weekOfYear = 1;
   my $weeks      = 1;
   my $expected_dates =
-'((?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])';
+'((?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1}))[-:\\/.](?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])';
+
   my $get_dates_cvs_check = get_dates( \$weekOfYear, \$weeks, "mdy", "/" );
 
   if (     ( $get_dates_cvs_check->{'start'} =~ m/$expected_dates/is )
@@ -101,7 +102,6 @@ subtest "get_dates" => sub {
   else {
     $date_form = 0;
   }
-
   ok( $date_form == 1, "correct date form created (yyyy-mm-dd - svn)" );
 
   $expected_dates =

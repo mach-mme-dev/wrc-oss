@@ -39,7 +39,7 @@ my $odt = create_odt_document(
 ok( $odt == 1, 'outputpath works' );
 file_exists_ok( '/tmp/Max Mustermann 10 2012.odt',
                 "/tmp/Max Mustermann 10 2012.odt exists and the given outputpath works" );
-file_size_ok( '/tmp/Max Mustermann 10 2012.odt', 9260 );
+file_size_ok( '/tmp/Max Mustermann 10 2012.odt', 9263 );
 
 my $delete_file = 'rm /tmp/Max\ Mustermann\ 10\ 2012.odt;';
 system($delete_file);
