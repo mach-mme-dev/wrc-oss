@@ -22,18 +22,30 @@ my %config;
 #### help option -h
 
 if ($opt_h) {
-	print "\nWRC.pl [options]
-\n\n-c = expects your config file  (required)
-\n-r = number of weeks since start date \n     (default = calculated out of the config parameter startDate)
-\n     Examples:\n     -r 1 (you get the report nr.1),\n     -r 1,4,6 (you get the report nr.1,4,6),\n     -r 1-3 (you get the report nr.1,2,3)
-\n-w = number of calendar week (default = current calendar week)
-\n-t = timespan (default = 1)
-\n-o = outputpath (default = parameter outputpath in the config
+	print "
+WRC.pl [options]
+-c = expects your config file  (required)
+
+-r = number of weeks since start date
+     (default = calculated out of the config parameter startDate)
+     Examples:
+     -r 1 (you get the report nr.1),
+     -r 1,4,6 (you get the report nr.1,4,6),
+     -r 1-3 (you get the report nr.1,2,3)
+
+-w = number of calendar week (default = current calendar week)
+
+-t = timespan (default = 1)
+
+-o = outputpath (default = parameter outputpath in the config
      if it's not configured , it would be the path /tmp)
-\n-f = outputformat (default = parameter outputformat in the config
+
+-f = outputformat (default = parameter outputformat in the config
      if it's not configured , it would be .odt)
-\n\nMore information:
-https://github.com/mach-mme-dev/wrc-oss\n";
+
+More information:
+https://github.com/mach-mme-dev/wrc-oss
+";
 
 	exit;
 }
@@ -60,7 +72,6 @@ my $outputformat  = $opt_f || $config{"outputformat"} || "odt";
 my $outputpath    = $opt_o || $config{"outputpath"} || "/tmp/";
 my $calendar_file = $config{"calendarfile"};
 my $current_report_number;
-my $choosen_report_number;
 my $vcs_type;
 my $host;
 my $repo;
@@ -81,7 +92,7 @@ $current_report_number = counter( $start_year, $start_month, $start_day, $input_
 
 ### Check parameters ###
 
-if ( $opt_r && $opt_w ) {
+if ($opt_r && $opt_w) {
 	print "\nYou can only use -r OR -w !\n\nFor more information use -h \n";
 	exit;
 }
@@ -91,13 +102,13 @@ if ( $opt_r && $opt_w ) {
 if ($opt_r) {
 	if ( $opt_r =~ m/-/ ) {
 		$opt_r =~ s/-/../;
-		foreach my $nr ( eval($opt_r) ) {
-			push( @report_numbers, $nr );
+		foreach my $nr (eval($opt_r)) {
+			push(@report_numbers, $nr);
 		}
 	}
 
-	elsif ( $opt_r =~ m/,/ ) {
-		@report_numbers = split( /,/, $opt_r );
+	elsif ($opt_r =~ m/,/) {
+		@report_numbers = split(/,/, $opt_r);
 	}
 	else {
 		print "\nWrong form at parameter -r\n\nFor more information use -h\n";
@@ -107,8 +118,9 @@ else {
 	@report_numbers = $current_report_number;
 }
 
-foreach (@report_numbers) {
-	$choosen_report_number = $_;
+### loop starts here ###
+
+foreach my $choosen_report_number (@report_numbers) {
 
 ### change $input_week if -r is given ###
 
